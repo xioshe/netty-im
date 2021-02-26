@@ -2,6 +2,7 @@ package com.kuma.im.server;
 
 import com.kuma.im.codec.PacketDecoder;
 import com.kuma.im.codec.PacketEncoder;
+import com.kuma.im.filter.MagicNumberSpliter;
 import com.kuma.im.server.handler.LoginRequestHandler;
 import com.kuma.im.server.handler.MessageRequestHandler;
 import io.netty.bootstrap.ServerBootstrap;
@@ -35,7 +36,8 @@ public class Server {
                 .childHandler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel ch) throws Exception {
-                        ch.pipeline().addLast(new PacketDecoder())
+                        ch.pipeline().addLast(new MagicNumberSpliter())
+                                .addLast(new PacketDecoder())
                                 .addLast(new LoginRequestHandler())
                                 // server 处理 Message 请求更频繁
                                 .addLast(new MessageRequestHandler())

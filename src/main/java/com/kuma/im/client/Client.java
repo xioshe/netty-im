@@ -6,6 +6,7 @@ import com.kuma.im.codec.PacketDecoder;
 import com.kuma.im.codec.PacketEncoder;
 import com.kuma.im.entity.PacketCodeC;
 import com.kuma.im.entity.packet.MessageRequestPacket;
+import com.kuma.im.filter.MagicNumberSpliter;
 import com.kuma.im.util.LoginUtils;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
@@ -48,7 +49,8 @@ public class Client {
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel ch) throws Exception {
-                        ch.pipeline().addLast(new PacketDecoder())
+                        ch.pipeline().addLast(new MagicNumberSpliter())
+                                .addLast(new PacketDecoder())
                                 .addLast(new MessageResponseHandler())
                                 .addLast(new LoginResponseHandler())
                                 .addLast(new PacketEncoder());
