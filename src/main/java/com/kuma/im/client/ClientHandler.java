@@ -3,7 +3,9 @@ package com.kuma.im.client;
 import com.kuma.im.entity.PacketCodeC;
 import com.kuma.im.entity.packet.LoginRequestPacket;
 import com.kuma.im.entity.packet.LoginResponsePacket;
+import com.kuma.im.entity.packet.MessageResponsePacket;
 import com.kuma.im.entity.packet.Packet;
+import com.kuma.im.util.LoginUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -41,10 +43,16 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
         if (response instanceof LoginResponsePacket) {
             LoginResponsePacket responsePacket = (LoginResponsePacket) response;
             if (responsePacket.isSuccess()) {
+                // 标记子通道为已登录
+                LoginUtils.markAsLogin(ctx.channel());
                 log.info("客户端登录成功");
             } else {
                 log.error("客户端登录失败, 原因: {}", responsePacket.getReason());
             }
+        } else if (response instanceof MessageResponsePacket) {
+            MessageResponsePacket messageResponsePacket = (MessageResponsePacket) response;
+            String message = messageResponsePacket.getMessage();
+            log.info("服务端发来消息 >> {}", message);
         }
     }
 }

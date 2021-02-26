@@ -1,9 +1,7 @@
 package com.kuma.im.server;
 
 import com.kuma.im.entity.PacketCodeC;
-import com.kuma.im.entity.packet.LoginRequestPacket;
-import com.kuma.im.entity.packet.LoginResponsePacket;
-import com.kuma.im.entity.packet.Packet;
+import com.kuma.im.entity.packet.*;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -23,21 +21,30 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         Packet packet = PacketCodeC.INSTANCE.decode(byteBuf);
 
         if (packet instanceof LoginRequestPacket) {
-            LoginRequestPacket requestPacket = (LoginRequestPacket) packet;
+            LoginRequestPacket loginRequestPacket = (LoginRequestPacket) packet;
 
-            LoginResponsePacket responsePacket = new LoginResponsePacket();
-            responsePacket.setVersion(packet.getVersion());
+            LoginResponsePacket loginResponsePacket = new LoginResponsePacket();
+            loginResponsePacket.setVersion(packet.getVersion());
 
-            if (valid(requestPacket)) {
-                log.info("客户端登录验证成功");
-                responsePacket.setReason("账号密码校验失败");
-                responsePacket.setSuccess(false);
-            } else {
+            if (!valid(loginRequestPacket)) {
                 log.info("客户端登录验证失败");
-                responsePacket.setSuccess(true);
+                loginResponsePacket.setReason("账号密码校验失败");
+                loginResponsePacket.setSuccess(false);
+            } else {
+                log.info("客户端登录验证成功");
+                loginResponsePacket.setSuccess(true);
             }
-            ByteBuf response = PacketCodeC.INSTANCE.encode(ctx.alloc(), responsePacket);
+            ByteBuf response = PacketCodeC.INSTANCE.encode(ctx.alloc(), loginResponsePacket);
             ctx.writeAndFlush(response);
+        } else if (packet instanceof MessageRequestPacket) {
+            MessageRequestPacket messageRequestPacket = (MessageRequestPacket) packet;
+            String message = messageRequestPacket.getMessage();
+            log.info("服务端发来消息 >> {}", message);
+
+            MessageResponsePacket messageResponsePacket = new MessageResponsePacket();
+            messageResponsePacket.setMessage("Echo [" + message + "]");
+            ByteBuf respBuf = PacketCodeC.INSTANCE.encode(ctx.alloc(), messageResponsePacket);
+            ctx.writeAndFlush(respBuf);
         }
     }
 

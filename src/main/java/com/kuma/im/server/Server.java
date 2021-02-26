@@ -37,7 +37,7 @@ public class Server {
         bind(bootstrap);
     }
 
-    private  void bind(final ServerBootstrap serverBootstrap) {
+    private void bind(final ServerBootstrap serverBootstrap) {
         serverBootstrap.bind(port).addListener(future -> {
             if (future.isSuccess()) {
                 log.info("端口[" + port + "]绑定成功!");
@@ -48,7 +48,6 @@ public class Server {
     }
 
     public static void main(String[] args) {
-        log.info("xxx");
         new Server(8080).startup();
     }
 }
