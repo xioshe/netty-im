@@ -1,5 +1,9 @@
 package com.kuma.im.server;
 
+import com.kuma.im.codec.PacketDecoder;
+import com.kuma.im.codec.PacketEncoder;
+import com.kuma.im.server.handler.LoginRequestHandler;
+import com.kuma.im.server.handler.MessageRequestHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -31,7 +35,11 @@ public class Server {
                 .childHandler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel ch) throws Exception {
-                        ch.pipeline().addLast(new ServerHandler());
+                        ch.pipeline().addLast(new PacketDecoder())
+                                .addLast(new LoginRequestHandler())
+                                // server 处理 Message 请求更频繁
+                                .addLast(new MessageRequestHandler())
+                                .addLast(new PacketEncoder());
                     }
                 });
         bind(bootstrap);

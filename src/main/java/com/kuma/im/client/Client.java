@@ -1,5 +1,9 @@
 package com.kuma.im.client;
 
+import com.kuma.im.client.handler.LoginResponseHandler;
+import com.kuma.im.client.handler.MessageResponseHandler;
+import com.kuma.im.codec.PacketDecoder;
+import com.kuma.im.codec.PacketEncoder;
 import com.kuma.im.entity.PacketCodeC;
 import com.kuma.im.entity.packet.MessageRequestPacket;
 import com.kuma.im.util.LoginUtils;
@@ -44,7 +48,10 @@ public class Client {
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel ch) throws Exception {
-                        ch.pipeline().addLast(new ClientHandler());
+                        ch.pipeline().addLast(new PacketDecoder())
+                                .addLast(new MessageResponseHandler())
+                                .addLast(new LoginResponseHandler())
+                                .addLast(new PacketEncoder());
                     }
                 });
         retryConnect(bootstrap, MAX_RETRY);
