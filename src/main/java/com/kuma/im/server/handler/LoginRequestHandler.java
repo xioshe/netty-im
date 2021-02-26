@@ -3,6 +3,7 @@ package com.kuma.im.server.handler;
 import com.kuma.im.entity.PacketCodeC;
 import com.kuma.im.entity.packet.LoginRequestPacket;
 import com.kuma.im.entity.packet.LoginResponsePacket;
+import com.kuma.im.util.LoginUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -29,6 +30,7 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
         } else {
             log.info("客户端登录验证成功");
             loginResponsePacket.setSuccess(true);
+            LoginUtils.markAsLogin(ctx.channel());
         }
         ByteBuf response = PacketCodeC.INSTANCE.encode(ctx.alloc(), loginResponsePacket);
         ctx.channel().writeAndFlush(response);

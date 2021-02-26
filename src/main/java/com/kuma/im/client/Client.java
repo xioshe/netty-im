@@ -7,7 +7,6 @@ import com.kuma.im.codec.PacketEncoder;
 import com.kuma.im.entity.PacketCodeC;
 import com.kuma.im.entity.packet.MessageRequestPacket;
 import com.kuma.im.filter.MagicNumberSpliter;
-import com.kuma.im.util.LoginUtils;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
@@ -82,17 +81,16 @@ public class Client {
 
     private void startConsoleThread(Channel channel) {
         new Thread(() -> {
+            // 有登录控制, 无需再次验证
             while (!Thread.interrupted()) {
-                if (LoginUtils.hasLogin(channel)) {
-                    log.info("输入消息发送至服务端 >> ");
-                    Scanner scanner = new Scanner(System.in);
-                    String line = scanner.nextLine();
+                log.info("输入消息发送至服务端 >> ");
+                Scanner scanner = new Scanner(System.in);
+                String line = scanner.nextLine();
 
-                    MessageRequestPacket messageRequestPacket = new MessageRequestPacket();
-                    messageRequestPacket.setMessage(line);
-                    ByteBuf byteBuf = PacketCodeC.INSTANCE.encode(channel.alloc(), messageRequestPacket);
-                    channel.writeAndFlush(byteBuf);
-                }
+                MessageRequestPacket messageRequestPacket = new MessageRequestPacket();
+                messageRequestPacket.setMessage(line);
+                ByteBuf byteBuf = PacketCodeC.INSTANCE.encode(channel.alloc(), messageRequestPacket);
+                channel.writeAndFlush(byteBuf);
             }
         }).start();
     }
