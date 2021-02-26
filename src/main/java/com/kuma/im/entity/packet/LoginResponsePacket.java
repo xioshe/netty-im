@@ -5,20 +5,20 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * 登录数据包
+ * 登录响应
  *
- * @author kuma 2021-02-25
+ * @author kuma 2021-02-26
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class LoginRequestPacket extends Packet {
+public class LoginResponsePacket extends Packet {
 
-    private String userId;
-    private String username;
-    private String password;
+    private boolean success;
+
+    private String reason;
 
     @Override
     public Byte getCommand() {
-        return Command.LOGIN_REQUEST;
+        return Command.LOGIN_RESPONSE;
     }
 }

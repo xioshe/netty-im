@@ -1,6 +1,7 @@
 package com.kuma.im.entity;
 
 import com.kuma.im.entity.packet.LoginRequestPacket;
+import com.kuma.im.entity.packet.LoginResponsePacket;
 import com.kuma.im.entity.packet.Packet;
 import com.kuma.im.serialize.JsonSerializer;
 import com.kuma.im.serialize.Serializer;
@@ -11,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.kuma.im.entity.Command.LOGIN_REQUEST;
+import static com.kuma.im.entity.Command.LOGIN_RESPONSE;
 
 /**
  * @author kuma 2021-02-25
@@ -18,20 +20,22 @@ import static com.kuma.im.entity.Command.LOGIN_REQUEST;
 public class PacketCodeC {
 
     private static final int MAGIC_NUMBER = 0x12345678;
-    private static final Map<Byte, Class<? extends Packet>> packetTypeMap;
-    private static final Map<Byte, Serializer> serializerMap;
+    public static final PacketCodeC INSTANCE = new PacketCodeC();
+    private final Map<Byte, Class<? extends Packet>> packetTypeMap;
+    private final Map<Byte, Serializer> serializerMap;
 
-    static {
+    public PacketCodeC() {
         packetTypeMap = new HashMap<>();
         packetTypeMap.put(LOGIN_REQUEST, LoginRequestPacket.class);
+        packetTypeMap.put(LOGIN_RESPONSE, LoginResponsePacket.class);
 
         serializerMap = new HashMap<>();
         Serializer serializer = new JsonSerializer();
         serializerMap.put(serializer.getSerializerAlgorithm(), serializer);
     }
 
-    public ByteBuf encode(Packet packet) {
-        ByteBuf buf = ByteBufAllocator.DEFAULT.ioBuffer();
+    public ByteBuf encode(ByteBufAllocator byteBufAllocator, Packet packet) {
+        ByteBuf buf = byteBufAllocator.ioBuffer();
         byte[] bytes = Serializer.DEFAULT.serialize(packet);
 
         buf.writeInt(MAGIC_NUMBER);
@@ -64,12 +68,10 @@ public class PacketCodeC {
     }
 
     private Serializer getSerializer(byte serializeAlgorithm) {
-
         return serializerMap.get(serializeAlgorithm);
     }
 
     private Class<? extends Packet> getRequestType(byte command) {
-
         return packetTypeMap.get(command);
     }
 }

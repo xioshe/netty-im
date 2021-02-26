@@ -1,5 +1,6 @@
 package com.kuma.im.entity.packet;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 
 /**
@@ -13,6 +14,7 @@ public abstract class Packet {
     /**
      * 1 字节的版本号字段
      */
+    @JSONField(deserialize = false, serialize = false)
     private Byte version = 1;
 
     /**
@@ -21,5 +23,6 @@ public abstract class Packet {
      * @see com.kuma.im.entity.Command
      * @return Byte, code of Request Command
      */
+    @JSONField(serialize = false)
     public abstract Byte getCommand();
 }

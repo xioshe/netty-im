@@ -5,6 +5,7 @@ import com.kuma.im.entity.packet.Packet;
 import com.kuma.im.serialize.JsonSerializer;
 import com.kuma.im.serialize.Serializer;
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufAllocator;
 import org.junit.Test;
 
 import static org.junit.Assert.assertArrayEquals;
@@ -21,12 +22,12 @@ public class PacketCodeCTest {
         LoginRequestPacket loginRequestPacket = new LoginRequestPacket();
 
         loginRequestPacket.setVersion(((byte) 1));
-        loginRequestPacket.setUserId(123);
+        loginRequestPacket.setUserId("123");
         loginRequestPacket.setUsername("zhangsan");
         loginRequestPacket.setPassword("password");
 
         PacketCodeC packetCodeC = new PacketCodeC();
-        ByteBuf byteBuf = packetCodeC.encode(loginRequestPacket);
+        ByteBuf byteBuf = packetCodeC.encode(ByteBufAllocator.DEFAULT, loginRequestPacket);
         Packet decodedPacket = packetCodeC.decode(byteBuf);
 
         assertArrayEquals(serializer.serialize(loginRequestPacket), serializer.serialize(decodedPacket));
