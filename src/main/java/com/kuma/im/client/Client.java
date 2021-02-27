@@ -1,11 +1,13 @@
 package com.kuma.im.client;
 
+import com.kuma.im.client.console.ConsoleCommandManager;
+import com.kuma.im.client.console.ConsoleCommander;
+import com.kuma.im.client.console.LoginConsoleCommander;
+import com.kuma.im.client.handler.CreateGroupResponseHandler;
 import com.kuma.im.client.handler.LoginResponseHandler;
 import com.kuma.im.client.handler.MessageResponseHandler;
 import com.kuma.im.codec.PacketDecoder;
 import com.kuma.im.codec.PacketEncoder;
-import com.kuma.im.entity.packet.LoginRequestPacket;
-import com.kuma.im.entity.packet.MessageRequestPacket;
 import com.kuma.im.filter.MagicNumberSpliter;
 import com.kuma.im.util.SessionUtils;
 import io.netty.bootstrap.Bootstrap;
@@ -51,6 +53,7 @@ public class Client {
                         ch.pipeline().addLast(new MagicNumberSpliter())
                                 .addLast(new PacketDecoder())
                                 .addLast(new MessageResponseHandler())
+                                .addLast(new CreateGroupResponseHandler())
                                 .addLast(new LoginResponseHandler())
                                 .addLast(new PacketEncoder());
                     }
@@ -80,36 +83,19 @@ public class Client {
     }
 
     private void startConsoleThread(Channel channel) {
-        new Thread(() -> {
-            // 有登录控制, 无需再次验证
-            while (!Thread.interrupted()) {
-                Scanner scanner = new Scanner(System.in);
-                if (!SessionUtils.hasLogin(channel)) {
-                    LoginRequestPacket loginRequestPacket = new LoginRequestPacket();
-                    System.out.print("请登录\n输入用户名: ");
-                    String username = scanner.nextLine();
-                    loginRequestPacket.setUsername(username);
-                    // 使用默认密码
-                    loginRequestPacket.setPassword("pwd");
+        ConsoleCommander manager = new ConsoleCommandManager();
+        ConsoleCommander loginConsoleCommander = new LoginConsoleCommander();
+        Scanner scanner = new Scanner(System.in);
 
-                    // 发送登录数据包
-                    channel.writeAndFlush(loginRequestPacket);
-                    waitForLoginResponse();
+        new Thread(() -> {
+            while (!Thread.interrupted()) {
+                if (!SessionUtils.hasLogin(channel)) {
+                    loginConsoleCommander.exec(scanner, channel);
                 } else {
-                    String toUserId = scanner.next();
-                    String message = scanner.next();
-                    channel.writeAndFlush(new MessageRequestPacket(toUserId, message));
+                    manager.exec(scanner, channel);
                 }
             }
         }).start();
-    }
-
-    private void waitForLoginResponse() {
-        try {
-            TimeUnit.SECONDS.sleep(1);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
     }
 
     public static void main(String[] args) {

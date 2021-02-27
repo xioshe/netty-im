@@ -4,6 +4,7 @@ import com.kuma.im.codec.PacketDecoder;
 import com.kuma.im.codec.PacketEncoder;
 import com.kuma.im.filter.MagicNumberSpliter;
 import com.kuma.im.server.handler.AuthHandler;
+import com.kuma.im.server.handler.CreateGroupRequestHandler;
 import com.kuma.im.server.handler.LoginRequestHandler;
 import com.kuma.im.server.handler.MessageRequestHandler;
 import io.netty.bootstrap.ServerBootstrap;
@@ -41,8 +42,8 @@ public class Server {
                                 .addLast(new PacketDecoder())
                                 .addLast(new LoginRequestHandler())
                                 .addLast(new AuthHandler())
-                                // server 处理 Message 请求更频繁
                                 .addLast(new MessageRequestHandler())
+                                .addLast(new CreateGroupRequestHandler())
                                 .addLast(new PacketEncoder());
                     }
                 });
