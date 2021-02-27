@@ -26,7 +26,7 @@ public class CreateGroupRequestHandler extends SimpleChannelInboundHandler<Creat
     protected void channelRead0(ChannelHandlerContext ctx, CreateGroupRequestPacket msg) {
         List<String> userIdList = msg.getUserIdList();
 
-        List<String> userNameList = new ArrayList<>();
+        List<String> usernameList = new ArrayList<>();
         // 1. 创建一个 channel 分组
         ChannelGroup channelGroup = new DefaultChannelGroup(ctx.executor());
 
@@ -35,7 +35,7 @@ public class CreateGroupRequestHandler extends SimpleChannelInboundHandler<Creat
             Channel channel = SessionUtils.getChannel(userId);
             if (channel != null) {
                 channelGroup.add(channel);
-                userNameList.add(SessionUtils.getSession(channel).getUsername());
+                usernameList.add(SessionUtils.getSession(channel).getUsername());
             }
         }
 
@@ -43,12 +43,12 @@ public class CreateGroupRequestHandler extends SimpleChannelInboundHandler<Creat
         CreateGroupResponsePacket createGroupResponsePacket = new CreateGroupResponsePacket();
         createGroupResponsePacket.setSuccess(true);
         createGroupResponsePacket.setGroupId(IDUtils.randomId());
-        createGroupResponsePacket.setUserNameList(userNameList);
+        createGroupResponsePacket.setUsernameList(usernameList);
 
         // 4. 给每个客户端发送拉群通知
         channelGroup.writeAndFlush(createGroupResponsePacket);
 
         log.info("群创建成功, id 为 [{}]", createGroupResponsePacket.getGroupId());
-        log.info("群成员列表: {}", createGroupResponsePacket.getUserNameList());
+        log.info("群成员列表: {}", createGroupResponsePacket.getUsernameList());
     }
 }

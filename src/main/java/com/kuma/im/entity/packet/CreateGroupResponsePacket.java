@@ -19,7 +19,7 @@ public class CreateGroupResponsePacket extends Packet{
 
     private String groupId;
 
-    private List<String> userNameList;
+    private List<String> usernameList;
 
     @Override
     public Byte getCommand() {
