@@ -3,6 +3,7 @@ package com.kuma.im.util;
 import com.kuma.im.arrtibute.Attributes;
 import com.kuma.im.session.Session;
 import io.netty.channel.Channel;
+import io.netty.channel.group.ChannelGroup;
 import lombok.experimental.UtilityClass;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -17,6 +18,7 @@ import java.util.concurrent.ConcurrentMap;
 public class SessionUtils {
 
     private static final ConcurrentMap<String, Channel> userIdChannelMap = new ConcurrentHashMap<>();
+    private static final ConcurrentMap<String, ChannelGroup> groupIdChannelGroupMap = new ConcurrentHashMap<>();
 
     public static void bindSession(Session session, Channel channel) {
         userIdChannelMap.put(session.getUserId(), channel);
@@ -40,5 +42,9 @@ public class SessionUtils {
 
     public static Channel getChannel(String userId) {
         return userIdChannelMap.get(userId);
+    }
+
+    public static ChannelGroup getChannelGroup(String groupId) {
+        return groupIdChannelGroupMap.get(groupId);
     }
 }
