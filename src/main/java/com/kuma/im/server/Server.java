@@ -34,13 +34,14 @@ public class Server {
                 .childOption(ChannelOption.TCP_NODELAY, true)
                 .childHandler(new ChannelInitializer<SocketChannel>() {
                     @Override
-                    protected void initChannel(SocketChannel ch) throws Exception {
+                    protected void initChannel(SocketChannel ch) {
                         ch.pipeline().addLast(new MagicNumberSpliter())
                                 .addLast(new PacketDecoder())
                                 .addLast(new LoginRequestHandler())
                                 .addLast(new AuthHandler())
                                 .addLast(new MessageRequestHandler())
                                 .addLast(new CreateGroupRequestHandler())
+                                .addLast(new JoinGroupRequestHandler())
                                 .addLast(new LogoutRequestHandler())
                                 .addLast(new PacketEncoder());
                     }
@@ -51,9 +52,9 @@ public class Server {
     private void bind(final ServerBootstrap serverBootstrap) {
         serverBootstrap.bind(port).addListener(future -> {
             if (future.isSuccess()) {
-                log.info("端口[" + port + "]绑定成功!");
+                log.info("端口[{}]绑定成功!", port);
             } else {
-                log.info("端口[" + port + "]绑定失败!");
+                log.info("端口[{}]绑定失败!", port);
             }
         });
     }

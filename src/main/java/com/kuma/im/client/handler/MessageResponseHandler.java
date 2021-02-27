@@ -17,6 +17,6 @@ public class MessageResponseHandler extends SimpleChannelInboundHandler<MessageR
     protected void channelRead0(ChannelHandlerContext ctx, MessageResponsePacket msg) {
         String fromUserId = msg.getFromUserId();
         String fromUsername = msg.getFromUsername();
-        log.info(fromUserId + ":" + fromUsername + " -> " + msg.getMessage());
+        log.info("{}:{} -> {}", fromUserId, fromUsername, msg.getMessage());
     }
 }
