@@ -1,13 +1,14 @@
 package com.kuma.im.server.handler;
 
-import com.kuma.im.entity.PacketCodeC;
 import com.kuma.im.entity.packet.LoginRequestPacket;
 import com.kuma.im.entity.packet.LoginResponsePacket;
-import com.kuma.im.util.LoginUtils;
-import io.netty.buffer.ByteBuf;
+import com.kuma.im.session.Session;
+import com.kuma.im.util.SessionUtils;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.UUID;
 
 /**
  * 登录请求处理
@@ -30,13 +31,26 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
         } else {
             log.info("客户端登录验证成功");
             loginResponsePacket.setSuccess(true);
-            LoginUtils.markAsLogin(ctx.channel());
+            // 记录 Session
+            String userId = randomUserId();
+            loginResponsePacket.setUserId(userId);
+            loginResponsePacket.setUsername(msg.getUsername());
+            log.info("[{}}]登录成功", msg.getUsername());
+            SessionUtils.bindSession(new Session(userId, msg.getUsername()), ctx.channel());
         }
-        ByteBuf response = PacketCodeC.INSTANCE.encode(ctx.alloc(), loginResponsePacket);
-        ctx.channel().writeAndFlush(response);
+        ctx.channel().writeAndFlush(loginResponsePacket);
+    }
+
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) {
+        SessionUtils.unBindSession(ctx.channel());
     }
 
     private boolean valid(LoginRequestPacket loginRequestPacket) {
         return true;
+    }
+
+    private static String randomUserId() {
+        return UUID.randomUUID().toString().split("-")[0];
     }
 }

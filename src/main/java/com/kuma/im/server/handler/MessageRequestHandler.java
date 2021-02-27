@@ -1,9 +1,10 @@
 package com.kuma.im.server.handler;
 
-import com.kuma.im.entity.PacketCodeC;
 import com.kuma.im.entity.packet.MessageRequestPacket;
 import com.kuma.im.entity.packet.MessageResponsePacket;
-import io.netty.buffer.ByteBuf;
+import com.kuma.im.session.Session;
+import com.kuma.im.util.SessionUtils;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
@@ -18,12 +19,22 @@ public class MessageRequestHandler extends SimpleChannelInboundHandler<MessageRe
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, MessageRequestPacket messageRequestPacket) {
-        String message = messageRequestPacket.getMessage();
-        log.info("服务端发来消息 >> {}", message);
-
+        Channel toUserChannel = SessionUtils.getChannel(messageRequestPacket.getToUserId());
+        // 如果消息接收者不在线，fail fast
+        if (toUserChannel == null || !SessionUtils.hasLogin(toUserChannel)) {
+            log.info("[{}] 不在线，消息发送失败!", messageRequestPacket.getToUserId());
+            return;
+        }
+        // 将消息内容从发送人转交给接收人
         MessageResponsePacket messageResponsePacket = new MessageResponsePacket();
-        messageResponsePacket.setMessage("Echo [" + message + "]");
-        ByteBuf respBuf = PacketCodeC.INSTANCE.encode(ctx.alloc(), messageResponsePacket);
-        ctx.channel().writeAndFlush(respBuf);
+        messageResponsePacket.setMessage(messageRequestPacket.getMessage());
+
+        // 取出消息发送人的 Session
+        Session session = SessionUtils.getSession(ctx.channel());
+        // 从 session 中取出发送人的信息
+        messageResponsePacket.setFromUserId(session.getUserId());
+        messageResponsePacket.setFromUsername(session.getUsername());
+
+        toUserChannel.writeAndFlush(messageResponsePacket);
     }
 }

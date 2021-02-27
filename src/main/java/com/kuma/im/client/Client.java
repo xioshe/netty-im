@@ -4,11 +4,11 @@ import com.kuma.im.client.handler.LoginResponseHandler;
 import com.kuma.im.client.handler.MessageResponseHandler;
 import com.kuma.im.codec.PacketDecoder;
 import com.kuma.im.codec.PacketEncoder;
-import com.kuma.im.entity.PacketCodeC;
+import com.kuma.im.entity.packet.LoginRequestPacket;
 import com.kuma.im.entity.packet.MessageRequestPacket;
 import com.kuma.im.filter.MagicNumberSpliter;
+import com.kuma.im.util.SessionUtils;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -83,16 +83,33 @@ public class Client {
         new Thread(() -> {
             // 有登录控制, 无需再次验证
             while (!Thread.interrupted()) {
-                log.info("输入消息发送至服务端 >> ");
                 Scanner scanner = new Scanner(System.in);
-                String line = scanner.nextLine();
+                if (!SessionUtils.hasLogin(channel)) {
+                    LoginRequestPacket loginRequestPacket = new LoginRequestPacket();
+                    System.out.print("请登录\n输入用户名: ");
+                    String username = scanner.nextLine();
+                    loginRequestPacket.setUsername(username);
+                    // 使用默认密码
+                    loginRequestPacket.setPassword("pwd");
 
-                MessageRequestPacket messageRequestPacket = new MessageRequestPacket();
-                messageRequestPacket.setMessage(line);
-                ByteBuf byteBuf = PacketCodeC.INSTANCE.encode(channel.alloc(), messageRequestPacket);
-                channel.writeAndFlush(byteBuf);
+                    // 发送登录数据包
+                    channel.writeAndFlush(loginRequestPacket);
+                    waitForLoginResponse();
+                } else {
+                    String toUserId = scanner.next();
+                    String message = scanner.next();
+                    channel.writeAndFlush(new MessageRequestPacket(toUserId, message));
+                }
             }
         }).start();
+    }
+
+    private void waitForLoginResponse() {
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 
     public static void main(String[] args) {

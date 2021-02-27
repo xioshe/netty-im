@@ -1,5 +1,6 @@
 package com.kuma.im.arrtibute;
 
+import com.kuma.im.session.Session;
 import io.netty.util.AttributeKey;
 
 /**
@@ -9,4 +10,5 @@ import io.netty.util.AttributeKey;
  */
 public interface Attributes {
     AttributeKey<Boolean> LOGIN = AttributeKey.newInstance("login");
+    AttributeKey<Session> SESSION = AttributeKey.newInstance("session");
 }
