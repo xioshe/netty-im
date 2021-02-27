@@ -5,6 +5,7 @@ import com.kuma.im.client.console.ConsoleCommander;
 import com.kuma.im.client.console.LoginConsoleCommander;
 import com.kuma.im.client.handler.CreateGroupResponseHandler;
 import com.kuma.im.client.handler.LoginResponseHandler;
+import com.kuma.im.client.handler.LogoutResponseHandler;
 import com.kuma.im.client.handler.MessageResponseHandler;
 import com.kuma.im.codec.PacketDecoder;
 import com.kuma.im.codec.PacketEncoder;
@@ -55,6 +56,7 @@ public class Client {
                                 .addLast(new MessageResponseHandler())
                                 .addLast(new CreateGroupResponseHandler())
                                 .addLast(new LoginResponseHandler())
+                                .addLast(new LogoutResponseHandler())
                                 .addLast(new PacketEncoder());
                     }
                 });

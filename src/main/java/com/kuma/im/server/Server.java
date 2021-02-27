@@ -3,10 +3,7 @@ package com.kuma.im.server;
 import com.kuma.im.codec.PacketDecoder;
 import com.kuma.im.codec.PacketEncoder;
 import com.kuma.im.filter.MagicNumberSpliter;
-import com.kuma.im.server.handler.AuthHandler;
-import com.kuma.im.server.handler.CreateGroupRequestHandler;
-import com.kuma.im.server.handler.LoginRequestHandler;
-import com.kuma.im.server.handler.MessageRequestHandler;
+import com.kuma.im.server.handler.*;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -44,6 +41,7 @@ public class Server {
                                 .addLast(new AuthHandler())
                                 .addLast(new MessageRequestHandler())
                                 .addLast(new CreateGroupRequestHandler())
+                                .addLast(new LogoutRequestHandler())
                                 .addLast(new PacketEncoder());
                     }
                 });
