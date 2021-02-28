@@ -37,6 +37,6 @@ public class QuitGroupRequestHandler extends SimpleChannelInboundHandler<QuitGro
             quitGroupResponsePacket.setReason("群聊不存在!");
         }
 
-        ctx.channel().writeAndFlush(quitGroupResponsePacket);
+        ctx.writeAndFlush(quitGroupResponsePacket);
     }
 }

@@ -36,6 +36,6 @@ public class JoinGroupRequestHandler extends SimpleChannelInboundHandler<JoinGro
             joinGroupResponsePacket.setReason("群聊不存在");
         }
 
-        ctx.channel().writeAndFlush(joinGroupResponsePacket);
+        ctx.writeAndFlush(joinGroupResponsePacket);
     }
 }

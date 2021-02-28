@@ -44,7 +44,7 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
             log.info("[{}}]登录成功", msg.getUsername());
             SessionUtils.bindSession(new Session(userId, msg.getUsername()), ctx.channel());
         }
-        ctx.channel().writeAndFlush(loginResponsePacket);
+        ctx.writeAndFlush(loginResponsePacket);
     }
 
     @Override

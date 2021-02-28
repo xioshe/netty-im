@@ -28,6 +28,6 @@ public class LogoutRequestHandler extends SimpleChannelInboundHandler<LogoutRequ
         LogoutResponsePacket logoutResponsePacket = new LogoutResponsePacket();
         logoutResponsePacket.setSuccess(true);
         log.info("登出成功!");
-        ctx.channel().writeAndFlush(logoutResponsePacket);
+        ctx.writeAndFlush(logoutResponsePacket);
     }
 }

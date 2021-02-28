@@ -41,6 +41,6 @@ public class ListGroupMembersRequestHandler extends SimpleChannelInboundHandler<
             listGroupMembersResponsePacket.setSuccess(false);
             listGroupMembersResponsePacket.setReason("群聊不存在!");
         }
-        ctx.channel().writeAndFlush(listGroupMembersResponsePacket);
+        ctx.writeAndFlush(listGroupMembersResponsePacket);
     }
 }
