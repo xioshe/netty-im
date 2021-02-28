@@ -2,6 +2,7 @@ package com.kuma.im.server;
 
 import com.kuma.im.codec.PacketCodecHandler;
 import com.kuma.im.filter.MagicNumberSpliter;
+import com.kuma.im.idle.IMIdleStateHandler;
 import com.kuma.im.server.handler.*;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
@@ -34,7 +35,10 @@ public class Server {
                 .childHandler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel ch) {
-                        ch.pipeline().addLast(new MagicNumberSpliter())
+                        ch.pipeline()
+                                // 服务端空闲检测, 应该放在第一行
+                                .addLast(new IMIdleStateHandler())
+                                .addLast(new MagicNumberSpliter())
                                 .addLast(PacketCodecHandler.INSTANCE)
                                 .addLast(LoginRequestHandler.INSTANCE)
                                 .addLast(AuthHandler.INSTANCE)
