@@ -38,13 +38,7 @@ public class Server {
                                 .addLast(PacketCodecHandler.INSTANCE)
                                 .addLast(LoginRequestHandler.INSTANCE)
                                 .addLast(AuthHandler.INSTANCE)
-                                .addLast(MessageRequestHandler.INSTANCE)
-                                .addLast(GroupMessageRequestHandler.INSTANCE)
-                                .addLast(ListGroupMembersRequestHandler.INSTANCE)
-                                .addLast(CreateGroupRequestHandler.INSTANCE)
-                                .addLast(JoinGroupRequestHandler.INSTANCE)
-                                .addLast(QuitGroupRequestHandler.INSTANCE)
-                                .addLast(LogoutRequestHandler.INSTANCE);
+                                .addLast(IMHandler.INSTANCE);
                     }
                 });
         bind(bootstrap);
