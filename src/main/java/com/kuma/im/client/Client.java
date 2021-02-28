@@ -51,6 +51,7 @@ public class Client {
                                 .addLast(new PacketDecoder())
                                 .addLast(new LoginResponseHandler())
                                 .addLast(new MessageResponseHandler())
+                                .addLast(new GroupMessageResponseHandler())
                                 .addLast(new ListGroupMembersResponseHandler())
                                 .addLast(new CreateGroupResponseHandler())
                                 .addLast(new JoinGroupResponseHandler())

@@ -40,6 +40,7 @@ public class Server {
                                 .addLast(new LoginRequestHandler())
                                 .addLast(new AuthHandler())
                                 .addLast(new MessageRequestHandler())
+                                .addLast(new GroupMessageRequestHandler())
                                 .addLast(new ListGroupMembersRequestHandler())
                                 .addLast(new CreateGroupRequestHandler())
                                 .addLast(new JoinGroupRequestHandler())
