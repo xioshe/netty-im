@@ -19,7 +19,7 @@ public class IMIdleStateHandler extends IdleStateHandler {
     }
 
     @Override
-    protected void channelIdle(ChannelHandlerContext ctx, IdleStateEvent evt) throws Exception {
+    protected void channelIdle(ChannelHandlerContext ctx, IdleStateEvent evt) {
         log.info("{} 秒内未接受到数据, 关闭连接", READER_IDLE_SECONDS);
         ctx.channel().close();
     }

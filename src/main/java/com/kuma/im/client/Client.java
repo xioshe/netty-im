@@ -46,7 +46,9 @@ public class Client {
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel ch) throws Exception {
-                        ch.pipeline().addLast(new MagicNumberSpliter())
+                        ch.pipeline()
+                                .addLast(new MagicNumberSpliter())
+                                .addLast(new HeartBeatTimerHandler())
                                 .addLast(PacketCodecHandler.INSTANCE)
                                 .addLast(LoginResponseHandler.INSTANCE)
                                 .addLast(new MessageResponseHandler())
@@ -55,7 +57,9 @@ public class Client {
                                 .addLast(new CreateGroupResponseHandler())
                                 .addLast(new JoinGroupResponseHandler())
                                 .addLast(new QuitGroupResponseHandler())
-                                .addLast(new LogoutResponseHandler());
+                                .addLast(new LogoutResponseHandler())
+                                .addLast(new HeartBeatTimerHandler())
+                                .addLast(HeartBeatResponseHandler.INSTANCE);
                     }
                 });
         retryConnect(bootstrap, MAX_RETRY);

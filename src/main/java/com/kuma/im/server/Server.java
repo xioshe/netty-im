@@ -41,6 +41,7 @@ public class Server {
                                 .addLast(new MagicNumberSpliter())
                                 .addLast(PacketCodecHandler.INSTANCE)
                                 .addLast(LoginRequestHandler.INSTANCE)
+                                .addLast(HeartBeatRequestHandler.INSTANCE)
                                 .addLast(AuthHandler.INSTANCE)
                                 .addLast(IMHandler.INSTANCE);
                     }
