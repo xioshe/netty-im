@@ -1,7 +1,7 @@
 package com.kuma.im.codec;
 
-import com.kuma.im.entity.PacketCodeC;
-import com.kuma.im.entity.packet.Packet;
+import com.kuma.im.protocol.PacketCodeC;
+import com.kuma.im.protocol.packet.Packet;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;

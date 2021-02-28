@@ -1,7 +1,7 @@
-package com.kuma.im.entity;
+package com.kuma.im.protocol;
 
-import com.kuma.im.entity.packet.LoginRequestPacket;
-import com.kuma.im.entity.packet.Packet;
+import com.kuma.im.protocol.packet.LoginRequestPacket;
+import com.kuma.im.protocol.packet.Packet;
 import com.kuma.im.serialize.JsonSerializer;
 import com.kuma.im.serialize.Serializer;
 import io.netty.buffer.ByteBuf;

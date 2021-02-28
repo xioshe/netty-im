@@ -1,6 +1,6 @@
 package com.kuma.im.client.handler;
 
-import com.kuma.im.entity.packet.LogoutResponsePacket;
+import com.kuma.im.protocol.packet.LogoutResponsePacket;
 import com.kuma.im.util.SessionUtils;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;

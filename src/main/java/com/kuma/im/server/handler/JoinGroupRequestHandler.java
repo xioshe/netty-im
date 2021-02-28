@@ -1,7 +1,7 @@
 package com.kuma.im.server.handler;
 
-import com.kuma.im.entity.packet.JoinGroupRequestPacket;
-import com.kuma.im.entity.packet.JoinGroupResponsePacket;
+import com.kuma.im.protocol.packet.JoinGroupRequestPacket;
+import com.kuma.im.protocol.packet.JoinGroupResponsePacket;
 import com.kuma.im.util.SessionUtils;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -18,11 +18,17 @@ public class JoinGroupRequestHandler extends SimpleChannelInboundHandler<JoinGro
     protected void channelRead0(ChannelHandlerContext ctx, JoinGroupRequestPacket msg) throws Exception {
         String groupId = msg.getGroupId();
         ChannelGroup channelGroup = SessionUtils.getChannelGroup(groupId);
-        channelGroup.add(ctx.channel());
-
         JoinGroupResponsePacket joinGroupResponsePacket = new JoinGroupResponsePacket();
-        joinGroupResponsePacket.setGroupId(groupId);
-        joinGroupResponsePacket.setSuccess(true);
+        if (channelGroup != null) {
+            channelGroup.add(ctx.channel());
+
+            joinGroupResponsePacket.setGroupId(groupId);
+            joinGroupResponsePacket.setSuccess(true);
+        } else {
+            joinGroupResponsePacket.setSuccess(false);
+            joinGroupResponsePacket.setReason("群聊不存在");
+        }
+
         ctx.channel().writeAndFlush(joinGroupResponsePacket);
     }
 }

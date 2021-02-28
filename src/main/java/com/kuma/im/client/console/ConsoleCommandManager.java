@@ -1,5 +1,6 @@
 package com.kuma.im.client.console;
 
+import com.kuma.im.util.SessionUtils;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,7 +22,6 @@ public class ConsoleCommandManager implements ConsoleCommander {
         consoleCommanderMap = new HashMap<>(3);
         consoleCommanderMap.put("sendToUser", new SendToUserConsoleCommander());
         consoleCommanderMap.put("createGroup", new CreateGroupConsoleCommander());
-        consoleCommanderMap.put("login", new LoginConsoleCommander());
         consoleCommanderMap.put("logout", new LogoutConsoleCommander());
         consoleCommanderMap.put("quitGroup", new QuitGroupConsoleCommander());
         consoleCommanderMap.put("joinGroup", new JoinGroupConsoleCommander());
@@ -30,6 +30,10 @@ public class ConsoleCommandManager implements ConsoleCommander {
 
     @Override
     public void exec(Scanner scanner, Channel channel) {
+        if (!SessionUtils.hasLogin(channel)) {
+            return;
+        }
+
         String command = scanner.next();
         ConsoleCommander commander = consoleCommanderMap.get(command);
         if (commander != null) {

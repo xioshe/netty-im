@@ -18,7 +18,7 @@ public interface Serializer {
     byte getSerializerAlgorithm();
 
     /**
-     * java 对象转换成二进制
+     * java 对象转换成二进制字节数组
      *
      * @param obj Object
      * @return byte[] 字节数组
@@ -27,6 +27,7 @@ public interface Serializer {
 
     /**
      * 反序列化
+     * 将字节数组转换成实体类实例
      *
      * @param clazz 范型
      * @param bytes 字节数组

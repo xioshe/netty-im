@@ -1,7 +1,7 @@
 package com.kuma.im.server.handler;
 
-import com.kuma.im.entity.packet.MessageRequestPacket;
-import com.kuma.im.entity.packet.MessageResponsePacket;
+import com.kuma.im.protocol.packet.MessageRequestPacket;
+import com.kuma.im.protocol.packet.MessageResponsePacket;
 import com.kuma.im.session.Session;
 import com.kuma.im.util.SessionUtils;
 import io.netty.channel.Channel;

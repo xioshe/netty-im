@@ -1,6 +1,6 @@
-package com.kuma.im.entity;
+package com.kuma.im.protocol;
 
-import com.kuma.im.entity.packet.*;
+import com.kuma.im.protocol.packet.*;
 import com.kuma.im.serialize.JsonSerializer;
 import com.kuma.im.serialize.Serializer;
 import io.netty.buffer.ByteBuf;
@@ -9,7 +9,7 @@ import io.netty.buffer.ByteBufAllocator;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.kuma.im.entity.Command.*;
+import static com.kuma.im.protocol.Command.*;
 
 /**
  * @author kuma 2021-02-25

@@ -40,8 +40,10 @@ public class Server {
                                 .addLast(new LoginRequestHandler())
                                 .addLast(new AuthHandler())
                                 .addLast(new MessageRequestHandler())
+                                .addLast(new ListGroupMembersRequestHandler())
                                 .addLast(new CreateGroupRequestHandler())
                                 .addLast(new JoinGroupRequestHandler())
+                                .addLast(new QuitGroupRequestHandler())
                                 .addLast(new LogoutRequestHandler())
                                 .addLast(new PacketEncoder());
                     }

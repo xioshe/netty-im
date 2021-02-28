@@ -47,4 +47,8 @@ public class SessionUtils {
     public static ChannelGroup getChannelGroup(String groupId) {
         return groupIdChannelGroupMap.get(groupId);
     }
+
+    public static void bindChannelGroup(String groupId, ChannelGroup channelGroup) {
+        groupIdChannelGroupMap.put(groupId, channelGroup);
+    }
 }

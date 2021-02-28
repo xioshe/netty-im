@@ -1,6 +1,6 @@
 package com.kuma.im.client.console;
 
-import com.kuma.im.entity.packet.CreateGroupRequestPacket;
+import com.kuma.im.protocol.packet.CreateGroupRequestPacket;
 import io.netty.channel.Channel;
 
 import java.util.Arrays;

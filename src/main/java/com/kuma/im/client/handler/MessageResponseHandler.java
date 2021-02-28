@@ -1,6 +1,6 @@
 package com.kuma.im.client.handler;
 
-import com.kuma.im.entity.packet.MessageResponsePacket;
+import com.kuma.im.protocol.packet.MessageResponsePacket;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;

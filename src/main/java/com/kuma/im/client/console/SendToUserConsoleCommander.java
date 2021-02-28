@@ -1,6 +1,6 @@
 package com.kuma.im.client.console;
 
-import com.kuma.im.entity.packet.MessageRequestPacket;
+import com.kuma.im.protocol.packet.MessageRequestPacket;
 import io.netty.channel.Channel;
 
 import java.util.Scanner;

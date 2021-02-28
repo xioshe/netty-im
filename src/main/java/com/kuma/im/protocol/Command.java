@@ -1,4 +1,4 @@
-package com.kuma.im.entity;
+package com.kuma.im.protocol;
 
 /**
  * 请求指令类型

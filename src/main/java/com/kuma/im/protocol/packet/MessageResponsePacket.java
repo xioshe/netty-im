@@ -1,6 +1,6 @@
-package com.kuma.im.entity.packet;
+package com.kuma.im.protocol.packet;
 
-import com.kuma.im.entity.Command;
+import com.kuma.im.protocol.Command;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

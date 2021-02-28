@@ -1,12 +1,8 @@
 package com.kuma.im.client;
 
 import com.kuma.im.client.console.ConsoleCommandManager;
-import com.kuma.im.client.console.ConsoleCommander;
 import com.kuma.im.client.console.LoginConsoleCommander;
-import com.kuma.im.client.handler.CreateGroupResponseHandler;
-import com.kuma.im.client.handler.LoginResponseHandler;
-import com.kuma.im.client.handler.LogoutResponseHandler;
-import com.kuma.im.client.handler.MessageResponseHandler;
+import com.kuma.im.client.handler.*;
 import com.kuma.im.codec.PacketDecoder;
 import com.kuma.im.codec.PacketEncoder;
 import com.kuma.im.filter.MagicNumberSpliter;
@@ -53,9 +49,12 @@ public class Client {
                     protected void initChannel(SocketChannel ch) throws Exception {
                         ch.pipeline().addLast(new MagicNumberSpliter())
                                 .addLast(new PacketDecoder())
-                                .addLast(new MessageResponseHandler())
-                                .addLast(new CreateGroupResponseHandler())
                                 .addLast(new LoginResponseHandler())
+                                .addLast(new MessageResponseHandler())
+                                .addLast(new ListGroupMembersResponseHandler())
+                                .addLast(new CreateGroupResponseHandler())
+                                .addLast(new JoinGroupResponseHandler())
+                                .addLast(new QuitGroupResponseHandler())
                                 .addLast(new LogoutResponseHandler())
                                 .addLast(new PacketEncoder());
                     }
@@ -66,7 +65,7 @@ public class Client {
     private void retryConnect(Bootstrap bootstrap, int retry) {
         bootstrap.connect(host, port).addListener(future -> {
             if (future.isSuccess()) {
-                log.info("连接成功!");
+                log.info("连接成功, 启动控制台线程...");
                 // 连接成功之后启动控制台监听线程获取用户输入信息
                 ChannelFuture connectFuture = (ChannelFuture) future;
                 startConsoleThread(connectFuture.channel());
@@ -85,8 +84,8 @@ public class Client {
     }
 
     private void startConsoleThread(Channel channel) {
-        ConsoleCommander manager = new ConsoleCommandManager();
-        ConsoleCommander loginConsoleCommander = new LoginConsoleCommander();
+        ConsoleCommandManager manager = new ConsoleCommandManager();
+        LoginConsoleCommander loginConsoleCommander = new LoginConsoleCommander();
         Scanner scanner = new Scanner(System.in);
 
         new Thread(() -> {

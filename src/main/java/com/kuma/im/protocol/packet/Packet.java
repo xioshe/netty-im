@@ -1,4 +1,4 @@
-package com.kuma.im.entity.packet;
+package com.kuma.im.protocol.packet;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
@@ -20,7 +20,7 @@ public abstract class Packet {
     /**
      * 1 字节的指令字段
      *
-     * @see com.kuma.im.entity.Command
+     * @see com.kuma.im.protocol.Command
      * @return Byte, code of Request Command
      */
     @JSONField(serialize = false)

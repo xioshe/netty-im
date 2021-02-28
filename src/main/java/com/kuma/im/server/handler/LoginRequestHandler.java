@@ -1,7 +1,7 @@
 package com.kuma.im.server.handler;
 
-import com.kuma.im.entity.packet.LoginRequestPacket;
-import com.kuma.im.entity.packet.LoginResponsePacket;
+import com.kuma.im.protocol.packet.LoginRequestPacket;
+import com.kuma.im.protocol.packet.LoginResponsePacket;
 import com.kuma.im.session.Session;
 import com.kuma.im.util.IDUtils;
 import com.kuma.im.util.SessionUtils;

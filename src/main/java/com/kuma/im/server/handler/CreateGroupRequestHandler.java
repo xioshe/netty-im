@@ -1,7 +1,7 @@
 package com.kuma.im.server.handler;
 
-import com.kuma.im.entity.packet.CreateGroupRequestPacket;
-import com.kuma.im.entity.packet.CreateGroupResponsePacket;
+import com.kuma.im.protocol.packet.CreateGroupRequestPacket;
+import com.kuma.im.protocol.packet.CreateGroupResponsePacket;
 import com.kuma.im.util.IDUtils;
 import com.kuma.im.util.SessionUtils;
 import io.netty.channel.Channel;
@@ -42,7 +42,8 @@ public class CreateGroupRequestHandler extends SimpleChannelInboundHandler<Creat
         // 3. 创建群聊创建结果的响应
         CreateGroupResponsePacket createGroupResponsePacket = new CreateGroupResponsePacket();
         createGroupResponsePacket.setSuccess(true);
-        createGroupResponsePacket.setGroupId(IDUtils.randomId());
+        String groupId = IDUtils.randomId();
+        createGroupResponsePacket.setGroupId(groupId);
         createGroupResponsePacket.setUsernameList(usernameList);
 
         // 4. 给每个客户端发送拉群通知
@@ -50,5 +51,8 @@ public class CreateGroupRequestHandler extends SimpleChannelInboundHandler<Creat
 
         log.info("群创建成功, id 为 [{}]", createGroupResponsePacket.getGroupId());
         log.info("群成员列表: {}", createGroupResponsePacket.getUsernameList());
+
+        // 5. 保存群组相关的信息
+        SessionUtils.bindChannelGroup(groupId, channelGroup);
     }
 }

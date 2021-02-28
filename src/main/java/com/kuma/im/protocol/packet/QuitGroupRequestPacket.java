@@ -1,27 +1,26 @@
-package com.kuma.im.entity.packet;
+package com.kuma.im.protocol.packet;
 
-import com.kuma.im.entity.Command;
+import com.kuma.im.protocol.Command;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
- * 消息请求数据包
+ * 退出群聊请求
  *
- * @author kuma 2021-02-26
+ * @author kuma 2021-02-27
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class MessageRequestPacket extends Packet {
+public class QuitGroupRequestPacket extends Packet{
 
-    private String toUserId;
-    private String message;
+    private String groupId;
 
     @Override
     public Byte getCommand() {
-        return Command.MESSAGE_REQUEST;
+        return Command.QUIT_GROUP_REQUEST;
     }
 }
