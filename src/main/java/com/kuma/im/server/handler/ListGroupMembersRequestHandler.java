@@ -4,6 +4,7 @@ import com.kuma.im.protocol.packet.ListGroupMembersRequestPacket;
 import com.kuma.im.protocol.packet.ListGroupMembersResponsePacket;
 import com.kuma.im.session.Session;
 import com.kuma.im.util.SessionUtils;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.group.ChannelGroup;
@@ -16,7 +17,13 @@ import java.util.stream.Collectors;
  *
  * @author kuma 2021-02-27
  */
+@ChannelHandler.Sharable
 public class ListGroupMembersRequestHandler extends SimpleChannelInboundHandler<ListGroupMembersRequestPacket> {
+
+    public static final ListGroupMembersRequestHandler INSTANCE = new ListGroupMembersRequestHandler();
+
+    protected ListGroupMembersRequestHandler() {
+    }
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, ListGroupMembersRequestPacket msg) throws Exception {

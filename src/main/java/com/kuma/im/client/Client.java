@@ -3,8 +3,7 @@ package com.kuma.im.client;
 import com.kuma.im.client.console.ConsoleCommandManager;
 import com.kuma.im.client.console.LoginConsoleCommander;
 import com.kuma.im.client.handler.*;
-import com.kuma.im.codec.PacketDecoder;
-import com.kuma.im.codec.PacketEncoder;
+import com.kuma.im.codec.PacketCodecHandler;
 import com.kuma.im.filter.MagicNumberSpliter;
 import com.kuma.im.util.SessionUtils;
 import io.netty.bootstrap.Bootstrap;
@@ -48,16 +47,15 @@ public class Client {
                     @Override
                     protected void initChannel(SocketChannel ch) throws Exception {
                         ch.pipeline().addLast(new MagicNumberSpliter())
-                                .addLast(new PacketDecoder())
-                                .addLast(new LoginResponseHandler())
+                                .addLast(PacketCodecHandler.INSTANCE)
+                                .addLast(LoginResponseHandler.INSTANCE)
                                 .addLast(new MessageResponseHandler())
                                 .addLast(new GroupMessageResponseHandler())
                                 .addLast(new ListGroupMembersResponseHandler())
                                 .addLast(new CreateGroupResponseHandler())
                                 .addLast(new JoinGroupResponseHandler())
                                 .addLast(new QuitGroupResponseHandler())
-                                .addLast(new LogoutResponseHandler())
-                                .addLast(new PacketEncoder());
+                                .addLast(new LogoutResponseHandler());
                     }
                 });
         retryConnect(bootstrap, MAX_RETRY);

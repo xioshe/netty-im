@@ -1,6 +1,7 @@
 package com.kuma.im.server.handler;
 
 import com.kuma.im.util.SessionUtils;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +13,13 @@ import lombok.extern.slf4j.Slf4j;
  * @author kuma 2021-02-27
  */
 @Slf4j
+@ChannelHandler.Sharable
 public class AuthHandler extends ChannelInboundHandlerAdapter {
+
+    public static final AuthHandler INSTANCE = new AuthHandler();
+
+    protected AuthHandler() {
+    }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {

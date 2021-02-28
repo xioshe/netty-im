@@ -12,6 +12,7 @@ import java.util.List;
  *
  * @author kuma 2021-02-26
  */
+@Deprecated
 public class PacketDecoder extends ByteToMessageDecoder {
 
     @Override

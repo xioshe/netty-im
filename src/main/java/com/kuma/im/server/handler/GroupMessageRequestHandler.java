@@ -17,6 +17,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class GroupMessageRequestHandler extends SimpleChannelInboundHandler<GroupMessageRequestPacket> {
 
+    public static final GroupMessageRequestHandler INSTANCE = new GroupMessageRequestHandler();
+
+    protected GroupMessageRequestHandler() {
+    }
+
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, GroupMessageRequestPacket msg) throws Exception {
         String groupId = msg.getGroupId();

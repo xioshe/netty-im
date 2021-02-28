@@ -15,7 +15,6 @@ public class GroupMessageResponseHandler extends SimpleChannelInboundHandler<Gro
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, GroupMessageResponsePacket msg) throws Exception {
-        log.info("{}", isSharable());
         log.info("群聊[{}]收到消息: {}:{} >> {}",
                 msg.getGroupId(), msg.getFromUserId(), msg.getFromUsername(), msg.getMessage());
     }

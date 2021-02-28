@@ -1,7 +1,6 @@
 package com.kuma.im.server;
 
-import com.kuma.im.codec.PacketDecoder;
-import com.kuma.im.codec.PacketEncoder;
+import com.kuma.im.codec.PacketCodecHandler;
 import com.kuma.im.filter.MagicNumberSpliter;
 import com.kuma.im.server.handler.*;
 import io.netty.bootstrap.ServerBootstrap;
@@ -36,17 +35,16 @@ public class Server {
                     @Override
                     protected void initChannel(SocketChannel ch) {
                         ch.pipeline().addLast(new MagicNumberSpliter())
-                                .addLast(new PacketDecoder())
-                                .addLast(new LoginRequestHandler())
-                                .addLast(new AuthHandler())
-                                .addLast(new MessageRequestHandler())
-                                .addLast(new GroupMessageRequestHandler())
-                                .addLast(new ListGroupMembersRequestHandler())
-                                .addLast(new CreateGroupRequestHandler())
-                                .addLast(new JoinGroupRequestHandler())
-                                .addLast(new QuitGroupRequestHandler())
-                                .addLast(new LogoutRequestHandler())
-                                .addLast(new PacketEncoder());
+                                .addLast(PacketCodecHandler.INSTANCE)
+                                .addLast(LoginRequestHandler.INSTANCE)
+                                .addLast(AuthHandler.INSTANCE)
+                                .addLast(MessageRequestHandler.INSTANCE)
+                                .addLast(GroupMessageRequestHandler.INSTANCE)
+                                .addLast(ListGroupMembersRequestHandler.INSTANCE)
+                                .addLast(CreateGroupRequestHandler.INSTANCE)
+                                .addLast(JoinGroupRequestHandler.INSTANCE)
+                                .addLast(QuitGroupRequestHandler.INSTANCE)
+                                .addLast(LogoutRequestHandler.INSTANCE);
                     }
                 });
         bind(bootstrap);

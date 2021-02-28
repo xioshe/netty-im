@@ -3,6 +3,7 @@ package com.kuma.im.server.handler;
 import com.kuma.im.protocol.packet.QuitGroupRequestPacket;
 import com.kuma.im.protocol.packet.QuitGroupResponsePacket;
 import com.kuma.im.util.SessionUtils;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.group.ChannelGroup;
@@ -12,7 +13,13 @@ import io.netty.channel.group.ChannelGroup;
  *
  * @author kuma 2021-02-27
  */
+@ChannelHandler.Sharable
 public class QuitGroupRequestHandler extends SimpleChannelInboundHandler<QuitGroupRequestPacket> {
+
+    public static final QuitGroupRequestHandler INSTANCE = new QuitGroupRequestHandler();
+
+    protected QuitGroupRequestHandler() {
+    }
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, QuitGroupRequestPacket msg) throws Exception {

@@ -5,6 +5,7 @@ import com.kuma.im.protocol.packet.CreateGroupResponsePacket;
 import com.kuma.im.util.IDUtils;
 import com.kuma.im.util.SessionUtils;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.group.ChannelGroup;
@@ -20,7 +21,13 @@ import java.util.List;
  * @author kuma 2021-02-27
  */
 @Slf4j
+@ChannelHandler.Sharable
 public class CreateGroupRequestHandler extends SimpleChannelInboundHandler<CreateGroupRequestPacket> {
+
+    public static final CreateGroupRequestHandler INSTANCE = new CreateGroupRequestHandler();
+
+    protected CreateGroupRequestHandler() {
+    }
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, CreateGroupRequestPacket msg) {

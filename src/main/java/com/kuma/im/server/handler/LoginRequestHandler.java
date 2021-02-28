@@ -5,6 +5,7 @@ import com.kuma.im.protocol.packet.LoginResponsePacket;
 import com.kuma.im.session.Session;
 import com.kuma.im.util.IDUtils;
 import com.kuma.im.util.SessionUtils;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +16,13 @@ import lombok.extern.slf4j.Slf4j;
  * @author kuma 2021-02-26
  */
 @Slf4j
+@ChannelHandler.Sharable
 public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginRequestPacket> {
+
+    public static final LoginRequestHandler INSTANCE = new LoginRequestHandler();
+
+    protected LoginRequestHandler() {
+    }
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, LoginRequestPacket msg) {

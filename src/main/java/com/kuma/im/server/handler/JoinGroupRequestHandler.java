@@ -3,6 +3,7 @@ package com.kuma.im.server.handler;
 import com.kuma.im.protocol.packet.JoinGroupRequestPacket;
 import com.kuma.im.protocol.packet.JoinGroupResponsePacket;
 import com.kuma.im.util.SessionUtils;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.group.ChannelGroup;
@@ -12,7 +13,13 @@ import io.netty.channel.group.ChannelGroup;
  *
  * @author kuma 2021-02-27
  */
+@ChannelHandler.Sharable
 public class JoinGroupRequestHandler extends SimpleChannelInboundHandler<JoinGroupRequestPacket> {
+
+    public static final JoinGroupRequestHandler INSTANCE = new JoinGroupRequestHandler();
+
+    protected JoinGroupRequestHandler() {
+    }
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, JoinGroupRequestPacket msg) throws Exception {

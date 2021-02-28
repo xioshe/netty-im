@@ -3,6 +3,7 @@ package com.kuma.im.client.handler;
 import com.kuma.im.protocol.packet.LoginResponsePacket;
 import com.kuma.im.session.Session;
 import com.kuma.im.util.SessionUtils;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
@@ -13,12 +14,19 @@ import lombok.extern.slf4j.Slf4j;
  * @author kuma 2021-02-26
  */
 @Slf4j
+@ChannelHandler.Sharable
 public class LoginResponseHandler extends SimpleChannelInboundHandler<LoginResponsePacket> {
+
+    public static final LoginResponseHandler INSTANCE = new LoginResponseHandler();
+
+    protected LoginResponseHandler() {
+
+    }
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, LoginResponsePacket msg) {
         String username = msg.getUsername();
-
+        log.info("{}", isSharable());
         if (msg.isSuccess()) {
             // 客户端记录 session
             String userId = msg.getUserId();
